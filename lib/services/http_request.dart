@@ -8,8 +8,9 @@ class HttpRequest extends ShareApi {
   Future<UserModel> getUser() async {
     Uri uri = Uri.parse("${super.baseUrl}/user");
 
-    http.Response response = await http.get(uri);
-    Map<String, dynamic> data = json.decode(response.body);
+    http.Response response = await http.get(uri, headers: getToken());
+    Map<String, dynamic> data = json.decode(response.body)['data'];
+    print("data : ${data}");
     return UserModel(id: data['id'], name: data['name'], email: data['email']);
   }
 }

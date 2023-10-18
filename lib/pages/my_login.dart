@@ -1,4 +1,5 @@
 import 'package:auth_api/pages/dashboard.dart';
+import 'package:auth_api/services/login_request.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -15,31 +16,14 @@ class _MyLoginState extends State<MyLogin> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
+  final LoginRequest loginRequest = LoginRequest();
+
   late Box box1;
 
   @override
   void initState() {
     //
     super.initState();
-    createBox();
-  }
-
-  void createBox() async {
-    box1 = await Hive.openBox('logininfo');
-    getdata();
-  }
-
-  void getdata() async {
-    if (box1.get('email') != null) {
-      email.text = box1.get('email');
-      isChecked = true;
-      setState(() {});
-    }
-    if (box1.get('password') != null) {
-      password.text = box1.get('password');
-      isChecked = true;
-      setState(() {});
-    }
   }
 
   @override
@@ -55,7 +39,7 @@ class _MyLoginState extends State<MyLogin> {
           children: [
             Container(),
             Container(
-              padding: EdgeInsets.only(left: 35, top: 50),
+              padding: EdgeInsets.only(left: 35, top: 130),
               child: Text(
                 'Welcome\nBack',
                 style: TextStyle(color: Colors.white, fontSize: 33),
@@ -63,7 +47,8 @@ class _MyLoginState extends State<MyLogin> {
             ),
             SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.only(top: 300),
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -72,7 +57,7 @@ class _MyLoginState extends State<MyLogin> {
                       child: Column(
                         children: [
                           TextField(
-                            controller: email,
+                            controller: loginRequest.email,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                                 fillColor: Colors.grey.shade100,
@@ -86,7 +71,7 @@ class _MyLoginState extends State<MyLogin> {
                             height: 30,
                           ),
                           TextField(
-                            controller: password,
+                            controller: loginRequest.password,
                             style: TextStyle(),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -97,24 +82,8 @@ class _MyLoginState extends State<MyLogin> {
                                   borderRadius: BorderRadius.circular(10),
                                 )),
                           ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Remember Me",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Checkbox(
-                                value: isChecked,
-                                onChanged: (value) {
-                                  isChecked = !isChecked;
-                                  setState(() {});
-                                },
-                              ),
-                            ],
+                          const SizedBox(
+                            height: 40,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,15 +99,37 @@ class _MyLoginState extends State<MyLogin> {
                                 child: IconButton(
                                     color: Colors.white,
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) {
-                                            return Dashboard();
-                                          },
-                                        ),
-                                      );
-                                      login();
+                                      loginRequest.login().then((value) {
+                                        setState(() {
+                                          if (value) {
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/',
+                                            );
+                                          } else {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      'Username / password salah'),
+                                                  content:
+                                                      const Text('Gagal login'),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      child: const Text('OK'),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                        });
+                                      });
                                     },
                                     icon: Icon(
                                       Icons.arrow_forward,
