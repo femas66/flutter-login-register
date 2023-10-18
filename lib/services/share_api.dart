@@ -7,7 +7,7 @@ class ShareApi {
     final box = GetStorage();
     String? token = box.read('token');
     if (token != null) {
-      return {"Authorization": "Bearer " + token, "Accept": "application/json"};
+      return {"Authorization": "Bearer $token", "Accept": "application/json"};
     } else {
       return null;
     }
