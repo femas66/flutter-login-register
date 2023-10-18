@@ -22,7 +22,6 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     user = HttpRequest().getUser();
     request = LoginRequest();
-    print("Token : ${box.read('token')}");
   }
 
   @override
@@ -35,12 +34,10 @@ class _DashboardState extends State<Dashboard> {
               future: user,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
-                  // Tampilkan pesan error jika terjadi kesalahan
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  // Tampilkan data pengguna setelah berhasil dimuat
                   return Text('Nama Pengguna: ${snapshot.data?.name}');
                 }
               }),
