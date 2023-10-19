@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:auth_api/services/share_api.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +27,6 @@ class LoginRequest extends ShareApi {
 
   Future<void> logout() async {
     final Uri uri = Uri.parse("${super.baseUrl}/logout");
-    http.Response response = await http.post(uri, headers: getToken());
+    await http.post(uri, headers: getToken());
   }
 }

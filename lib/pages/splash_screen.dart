@@ -13,7 +13,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () => Navigator.pushNamed(context, '/login'));
+    Timer(const Duration(seconds: 3),
+        () => Navigator.pushNamed(context, '/login'));
   }
 
   @override
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Container(
             width: 170,
             height: 170,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(image: AssetImage('assets/logo.png'))),
           )
         ],

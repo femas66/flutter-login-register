@@ -223,7 +223,8 @@ class _MyRegisterState extends State<MyRegister> {
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/login');
                                 },
-                                child: Text(
+                                style: const ButtonStyle(),
+                                child: const Text(
                                   'Sign In',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
@@ -231,7 +232,6 @@ class _MyRegisterState extends State<MyRegister> {
                                       color: Colors.white,
                                       fontSize: 18),
                                 ),
-                                style: ButtonStyle(),
                               ),
                             ],
                           )

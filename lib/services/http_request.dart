@@ -10,7 +10,6 @@ class HttpRequest extends ShareApi {
 
     http.Response response = await http.get(uri, headers: getToken());
     Map<String, dynamic> data = json.decode(response.body)['data'];
-    print("data : ${data}");
     return UserModel(id: data['id'], name: data['name'], email: data['email']);
   }
 }
